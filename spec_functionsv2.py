@@ -49,7 +49,7 @@ def plot_spectrum_with_sliders(star_spectrum_file):
         wspace=0.2
     )
 
-    line, = ax.plot(current_spectrum.spectral_axis, current_spectrum.flux, lw=2, color='red', alpha=0.5)
+    line, = ax.plot(current_spectrum.spectral_axis, current_spectrum.flux, lw=2, color='red', alpha=0.5, label='Template')
     # Plot some general lines
     Hlines = {r'$\mathrm{H}_{\alpha}$': 6562.79, r'$\mathrm{H}_{\beta}$': 4861.35, r'$\mathrm{H}_{\gamma}$': 4340.47, r'$\mathrm{H}_{\delta}$': 4101.73, r'$\mathrm{H}_{\epsilon}$': 3970.07}
     color_map = plt.get_cmap('Spectral_r')
@@ -62,7 +62,7 @@ def plot_spectrum_with_sliders(star_spectrum_file):
  
     # Load the star spectrum
     star_spectrum = Spectrum1D.read(star_spectrum_file)
-    star_line, = ax.plot(star_spectrum.spectral_axis, star_spectrum.flux, color='blue', alpha=0.7)
+    star_line, = ax.plot(star_spectrum.spectral_axis, star_spectrum.flux, color='blue', alpha=0.7, label=f"{star_spectrum_file.split('/')[-1][1:-6]}")
 
     plt.title(star_spectrum_file.split('/')[-1][1:-6])
     plt.xlabel(r'Wavelength $\AA$')
@@ -123,6 +123,7 @@ def plot_spectrum_with_sliders(star_spectrum_file):
                     bbox=dict(facecolor='white', alpha=0.5))
         except KeyError:
             pass  # Do nothing if the spectra for the given temperature and gravity don't exist
+        plt.legend()
         plt.draw()
 
     slider_temp.on_changed(update)
@@ -192,7 +193,7 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
         wspace=0.2
     )
 
-    line, = ax.plot(current_spectrum.spectral_axis, current_spectrum.flux, lw=2, color='red', alpha=0.5)
+    line, = ax.plot(current_spectrum.spectral_axis, current_spectrum.flux, lw=2, color='red', alpha=0.5, label='Template')
     # Plot some general lines
     Hlines = {r'$\mathrm{H}_{\alpha}$': 6562.79, r'$\mathrm{H}_{\beta}$': 4861.35, r'$\mathrm{H}_{\gamma}$': 4340.47, r'$\mathrm{H}_{\delta}$': 4101.73, r'$\mathrm{H}_{\epsilon}$': 3970.07}
     color_map = plt.get_cmap('Spectral_r')
@@ -205,7 +206,7 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
  
     # Load the star spectrum
     star_spectrum = Spectrum1D.read(star_spectrum_file)
-    star_line, = ax.plot(star_spectrum.spectral_axis, star_spectrum.flux, color='blue', alpha=0.7)
+    star_line, = ax.plot(star_spectrum.spectral_axis, star_spectrum.flux, color='blue', alpha=0.7, label=f'{star_spectrum_file.split("/")[-1][1:-6]}')
 
     plt.title(star_spectrum_file.split('/')[-1][1:-6])
     plt.xlabel(r'Wavelength $\AA$')
@@ -290,17 +291,27 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
     fig.canvas.mpl_connect('key_press_event', on_key)
 
     plt.show()
+    plt.legend()
 
 
 
-def plot_spectrum(spec, smooth=None):
+
+def plot_spectrum(spec, smooth=None, labels=None):
     if smooth is None:
         smooth = np.ones(len(spec))
+
     spec_s = []
     for _spec, _smooth in zip(spec, smooth):
         spec_s.append(gaussian_smooth(_spec,_smooth))
     plt.title(f'smooth : {smooth}')
     plt.xlabel(r'Wavelength $\AA$')
-    plt.ylabel(r'Flux')
-    for spectra in spec_s:
-        plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
+    plt.ylabel(r'Normalized Flux')
+    plt.tight_layout()
+    if labels is not None:
+        print('has al')
+        for spectra,labl in zip(spec_s, labels):
+            plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8, label=labl)
+            plt.legend()
+    if labels is None:
+        for spectra in spec_s:
+            plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
