@@ -345,3 +345,4 @@ def plot_spectrum(spec, smooth=None, labels=None, xlims=(3900,8000), save=None):
         # Save the new file
         plt.savefig(f'./observed_stars/{save}.pdf')
         print(f'Saved new file: ./observed_stars/{save}.pdf')
+    return plt
