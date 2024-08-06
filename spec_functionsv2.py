@@ -5,8 +5,13 @@ from matplotlib.widgets import Slider
 from specutils.manipulation import gaussian_smooth
 from specutils import Spectrum1D
 import astropy.units as u
+import warnings
+from astropy.wcs import FITSFixedWarning
 
+plt.rcParams["font.family"] = "Serif"
+plt.rcParams["font.size"] = 14
 
+warnings.filterwarnings('ignore', category=FITSFixedWarning)
 
 def plot_spectrum_with_sliders(star_spectrum_file):
     '''    # Example usage:
@@ -296,7 +301,7 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
 
 
 
-def plot_spectrum(spec, smooth=None, labels=None):
+def plot_spectrum(spec, smooth=None, labels=None, xlims=(3900,8000), save=None):
     if smooth is None:
         smooth = [1]
         smooth = np.ones(len(spec))
@@ -308,17 +313,35 @@ def plot_spectrum(spec, smooth=None, labels=None):
     plt.figure(figsize=(20,4))
     plt.title(f'{labels[0]}')
     plt.xlabel(r'Wavelength $\AA$')
-    plt.xlim(3900,6800)
+    plt.xlim(xlims[0],xlims[1])
     plt.ylim(0.25,1.5)
     plt.ylabel(r'Normalized Flux')
     plt.tight_layout()
+    plt.grid(color='lightgrey')
     colors = ['black', 'red']
     als = [1,0.6]
     if labels is not None:
-        print('has al')
         for spectra,labl,clr,al in zip(spec_s, labels, colors,als):
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr)
             plt.legend()
     if labels is None:
         for spectra in spec_s:
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
+
+    if save is not None:
+        # Split the save variable to get the first part of the filename
+        save_prefix = save.split('_')[0]
+        for file in os.listdir('./observed_stars/'):
+            # Check if the file matches the prefix and has a .pdf extension
+            if file.startswith(save_prefix) and file.endswith('.pdf'):
+                print('A pdf for the star exists')
+                # Construct the full file path
+                file_path = os.path.join('./observed_stars',file)
+                # Delete the existing file
+                os.remove(file_path)
+                print(f'Deleted existing file: {file_path}')
+                break  # Stop checking once the file is found and deleted
+        
+        # Save the new file
+        plt.savefig(f'./observed_stars/{save}.pdf')
+        print(f'Saved new file: ./observed_stars/{save}.pdf')
