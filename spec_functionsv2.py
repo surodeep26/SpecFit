@@ -323,7 +323,7 @@ def plot_spectrum(spec, smooth=None, labels=None, xlims=(3900,8000), save=None):
     if labels is not None:
         for spectra,labl,clr,al in zip(spec_s, labels, colors,als):
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr)
-            plt.legend()
+            plt.legend(loc='upper right')
     if labels is None:
         for spectra in spec_s:
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
