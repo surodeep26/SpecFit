@@ -227,7 +227,7 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
     slider_temp = Slider(ax_temp, 'Temp. ($K$)', temperatures[0], temperatures[-1], valinit=initial_temperature,
                          valstep=250)
     slider_gravity = Slider(ax_gravity, r'$\log{g}$', gravities[0], gravities[-1], valinit=initial_gravity, valstep=0.5)
-    slider_smoothing_spec = Slider(ax_smoothing_spec, 'smooth (template)', 1, 200, valinit=initial_smoothing, valstep=5)
+    slider_smoothing_spec = Slider(ax_smoothing_spec, 'smooth (template)', 1, 200, valinit=initial_smoothing, valstep=2)
     slider_smoothing_star = Slider(ax_smoothing_star, 'smooth (star)', 1, 10, valinit=initial_smoothing, valstep=0.5)
     slider_radial_velocity = Slider(ax_radial_velocity, 'Radial Velocity (km/s)', -50, 50, valinit=0, valstep=2)
 
@@ -298,19 +298,26 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
 
 def plot_spectrum(spec, smooth=None, labels=None):
     if smooth is None:
+        smooth = [1]
         smooth = np.ones(len(spec))
 
     spec_s = []
     for _spec, _smooth in zip(spec, smooth):
         spec_s.append(gaussian_smooth(_spec,_smooth))
-    plt.title(f'smooth : {smooth}')
+    
+    plt.figure(figsize=(20,4))
+    plt.title(f'{labels[0]}')
     plt.xlabel(r'Wavelength $\AA$')
+    plt.xlim(3900,6800)
+    plt.ylim(0.25,1.5)
     plt.ylabel(r'Normalized Flux')
     plt.tight_layout()
+    colors = ['black', 'red']
+    als = [1,0.6]
     if labels is not None:
         print('has al')
-        for spectra,labl in zip(spec_s, labels):
-            plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8, label=labl)
+        for spectra,labl,clr,al in zip(spec_s, labels, colors,als):
+            plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr)
             plt.legend()
     if labels is None:
         for spectra in spec_s:
