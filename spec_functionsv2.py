@@ -301,7 +301,7 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
 
 
 
-def plot_spectrum(spec, smooth=None, labels=None, xlims=(3900,8000), save=None):
+def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
     if smooth is None:
         smooth = [1]
         smooth = np.ones(len(spec))
