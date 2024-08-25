@@ -8,11 +8,26 @@ import astropy.units as u
 import warnings
 from astropy.wcs import FITSFixedWarning
 
-plt.rcParams["font.family"] = "Serif"
-plt.rcParams["font.size"] = 14
+plt.rcParams["font.family"] = "Palatino"
+plt.rcParams["font.size"] = 30
+plt.rcParams['figure.subplot.top'] = 1
+plt.rcParams['figure.subplot.bottom'] = 0.185
+plt.rcParams['figure.subplot.left'] = 0.050
+plt.rcParams['figure.subplot.right'] = 0.980
+plt.rcParams['figure.subplot.hspace'] = 0.2
+plt.rcParams['figure.subplot.wspace'] = 0.2
 
 warnings.filterwarnings('ignore', category=FITSFixedWarning)
-
+import yaml
+def read_yaml_file(file_path):
+    '''
+    Read the configuration file for the rest of the code. 
+    This contains the various parameters for the code to run.
+    '''
+    with open(file_path, 'r') as yaml_file:
+        config = yaml.safe_load(yaml_file)
+    return config
+config = read_yaml_file('star_config.yaml')
 def plot_spectrum_with_sliders(star_spectrum_file):
     '''    # Example usage:
         plot_spectrum_with_sliders('./observed_stars/vHD14143i.fits')'''
@@ -310,8 +325,10 @@ def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
     for _spec, _smooth in zip(spec, smooth):
         spec_s.append(gaussian_smooth(_spec,_smooth))
     
-    plt.figure(figsize=(20,4))
-    plt.title(f'{labels[0]}')
+    plt.figure(figsize=(30,5))
+    
+    # plt.title(f'{labels[0]}')
+    plt.title(f'{labels[0]}    '+ f'{labels[1]}')
     plt.xlabel(r'Wavelength $\AA$')
     plt.xlim(xlims[0],xlims[1])
     plt.ylim(0.25,1.5)
@@ -323,7 +340,7 @@ def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
     if labels is not None:
         for spectra,labl,clr,al in zip(spec_s, labels, colors,als):
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr)
-            plt.legend(loc='upper right')
+            # plt.legend(loc='upper right')
     if labels is None:
         for spectra in spec_s:
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
@@ -345,4 +362,66 @@ def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
         # Save the new file
         plt.savefig(f'./observed_stars/{save}.pdf')
         print(f'Saved new file: ./observed_stars/{save}.pdf')
+    return plt
+
+
+def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
+    if smooth is None:
+        smooth = [1]
+        smooth = np.ones(len(spec))
+
+    spec_s = []
+    for _spec, _smooth in zip(spec, smooth):
+        spec_s.append(gaussian_smooth(_spec, _smooth))
+
+    plt.figure(figsize=(30, 5))
+    
+    # Plotting the spectra
+    colors = ['black', 'red']
+    als = [1, 0.6]
+    if labels is not None:
+        for spectra, labl, clr, al in zip(spec_s, labels, colors, als):
+            plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr)
+    else:
+        for spectra in spec_s:
+            plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
+
+    # Setting x and y limits
+    plt.xlim(xlims[0], xlims[1])
+    plt.ylim(0.25, 1.20)
+    
+    # Setting labels
+    plt.xlabel(r'Wavelength $\AA$', labelpad=-10)
+    plt.ylabel(r'Normalized Flux', labelpad=-5)
+
+    # Adding the title inside the plot
+    if labels is not None:
+        plt.text(x=0.5*(xlims[0] + xlims[1]), y=1.15, 
+                 s=f'{labels[0]}    {labels[1]}', 
+                 ha='center', va='top')
+
+    # Additional plot settings
+    # plt.tight_layout(pad=2.0)
+    
+    plt.grid(color='lightgrey')
+
+    # Saving the plot if save parameter is provided
+    if save is not None:
+        # Split the save variable to get the first part of the filename
+        save_prefix = save.split('_')[0]
+        for file in os.listdir('./observed_stars/'):
+            # Check if the file matches the prefix and has a .pdf extension
+            if file.startswith(save_prefix) and file.endswith('.pdf'):
+                print('A pdf for the star exists')
+                # Construct the full file path
+                file_path = os.path.join('./observed_stars', file)
+                # Delete the existing file
+                os.remove(file_path)
+                print(f'Deleted existing file: {file_path}')
+                break  # Stop checking once the file is found and deleted
+        
+        # Save the new file
+        plt.savefig(f'./observed_stars/{save}.pdf')
+        print(f'Saved new file: ./observed_stars/{save}.pdf')
+
     return plt

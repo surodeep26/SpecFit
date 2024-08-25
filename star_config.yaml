@@ -1,0 +1,68 @@
+Basel_8:
+  HD 259587: 
+    name: "HD259587"
+    T: 13000
+    logg: 3.50
+    model: "KURUCZ"
+    star_smooth: 1
+    template_smooth: 50
+
+  HD 259797: 
+    name: "HD259797"
+    T: 30000
+    logg: 4.00
+    model: "TLUSTY"
+    star_smooth: 1
+    template_smooth: 20
+
+  HD 259991: 
+    name: "HD259991"
+    T: 15000
+    logg: 3.00
+    model: "TLUSTY"
+    star_smooth: 1
+    template_smooth: 20
+
+
+Berkeley_97:
+  HD 240015:
+    name: "HD240015"
+    T: 24000
+    logg: 3.0
+    model: "TLUSTY"
+    star_smooth: 1
+    template_smooth: 20
+
+  HD 240016:
+    name: "HD240015"
+    T: 21000
+    logg: 3.0
+    model: "TLUSTY"
+    star_smooth: 1
+    template_smooth: 20
+
+
+RSG_8: 
+  HD 218440:
+    name: "HD218440"
+    T: 23000
+    logg: 3.75
+    model: "TLUSTY"
+    star_smooth: 1
+    template_smooth: 20
+  
+  HD 217348:
+    name: "HD217348"
+    T: 15000
+    logg: 3.5
+    model: "TLUSTY"
+    star_smooth: 1
+    template_smooth: 20
+  
+  HD 240013:
+    name: "HD240013"
+    T: 12000
+    logg: 4.0
+    model: "KURUCZ"
+    star_smooth: 1
+    template_smooth: 20
