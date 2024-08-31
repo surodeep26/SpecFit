@@ -1,14 +1,14 @@
 Basel_8:
-  HD 259587: 
-    name: "HD259587"
+  HD 259787: 
+    name: "HD259787"
     T: 13000
     logg: 3.50
     model: "KURUCZ"
     star_smooth: 1
     template_smooth: 50
 
-  HD 259797: 
-    name: "HD259797"
+  HD 259597: 
+    name: "HD259597"
     T: 30000
     logg: 4.00
     model: "TLUSTY"
@@ -34,7 +34,7 @@ Berkeley_97:
     template_smooth: 20
 
   HD 240016:
-    name: "HD240015"
+    name: "HD240016"
     T: 21000
     logg: 3.0
     model: "TLUSTY"
@@ -45,7 +45,7 @@ Berkeley_97:
 RSG_8: 
   HD 218440:
     name: "HD218440"
-    T: 23000
+    T: 19000
     logg: 3.75
     model: "TLUSTY"
     star_smooth: 1
@@ -54,13 +54,13 @@ RSG_8:
   HD 217348:
     name: "HD217348"
     T: 15000
-    logg: 3.5
+    logg: 4
     model: "TLUSTY"
     star_smooth: 1
     template_smooth: 20
   
-  HD 240013:
-    name: "HD240013"
+  HD 240113:
+    name: "HD240113"
     T: 12000
     logg: 4.0
     model: "KURUCZ"

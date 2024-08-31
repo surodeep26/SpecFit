@@ -9,11 +9,11 @@ import warnings
 from astropy.wcs import FITSFixedWarning
 
 plt.rcParams["font.family"] = "Palatino"
-plt.rcParams["font.size"] = 30
+plt.rcParams["font.size"] = 40
 plt.rcParams['figure.subplot.top'] = 1
-plt.rcParams['figure.subplot.bottom'] = 0.185
-plt.rcParams['figure.subplot.left'] = 0.050
-plt.rcParams['figure.subplot.right'] = 0.980
+plt.rcParams['figure.subplot.bottom'] = 0.245
+plt.rcParams['figure.subplot.left'] = 0.055
+plt.rcParams['figure.subplot.right'] = 0.975
 plt.rcParams['figure.subplot.hspace'] = 0.2
 plt.rcParams['figure.subplot.wspace'] = 0.2
 
@@ -316,7 +316,7 @@ def plot_spectrum_with_sliders_k(star_spectrum_file):
 
 
 
-def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
+# def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
     if smooth is None:
         smooth = [1]
         smooth = np.ones(len(spec))
@@ -374,29 +374,29 @@ def plot_spectrum(spec, smooth=None, labels=None, xlims=(4000,7000), save=None):
     for _spec, _smooth in zip(spec, smooth):
         spec_s.append(gaussian_smooth(_spec, _smooth))
 
-    plt.figure(figsize=(30, 5))
+    plt.figure(figsize=(25, 5))
     
     # Plotting the spectra
     colors = ['black', 'red']
     als = [1, 0.6]
     if labels is not None:
         for spectra, labl, clr, al in zip(spec_s, labels, colors, als):
-            plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr)
+            plt.plot(spectra.spectral_axis, spectra.flux, alpha=al, label=labl, c=clr, linewidth=2)
     else:
         for spectra in spec_s:
             plt.plot(spectra.spectral_axis, spectra.flux, alpha=0.8)
 
     # Setting x and y limits
     plt.xlim(xlims[0], xlims[1])
-    plt.ylim(0.25, 1.20)
+    plt.ylim(0.4, 1.35)
     
     # Setting labels
     plt.xlabel(r'Wavelength $\AA$', labelpad=-10)
-    plt.ylabel(r'Normalized Flux', labelpad=-5)
+    plt.ylabel(r'Norm. Flux', labelpad=-5)
 
     # Adding the title inside the plot
     if labels is not None:
-        plt.text(x=0.5*(xlims[0] + xlims[1]), y=1.15, 
+        plt.text(x=0.5*(xlims[0] + xlims[1]), y=1.30, 
                  s=f'{labels[0]}    {labels[1]}', 
                  ha='center', va='top')
 
